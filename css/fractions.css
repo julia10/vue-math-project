@@ -1,0 +1,11 @@
+.fractions-box {
+    
+    padding-right: 620px;
+    padding-left: 20px;
+    padding-top: 20px;
+    padding-bottom: 20px;
+}
+
+.nominator {
+    border-bottom: 1px solid;
+}
