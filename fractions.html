@@ -13,7 +13,7 @@
     <script src="/js/fractions.js"></script>
     <link rel="stylesheet" href="/css/style.css">
     <link rel="stylesheet" href="/css/fractions.css">
-    
+
 </head>
 
 <body>
@@ -55,66 +55,16 @@
     <!-- Content -->
     <div id="fractions-app" class="container content">
         <div class="card">
-            <div  class="card-body" >
+            <div class="card-body">
                 <h4>Try to calculate the correct answer for these questions:</h4>
 
                 <div class="container fractions-box text-center">
-                    <!--First row of expression-->
-                    <div class="row">
-                        <div class="col">
-                            <table>
-                                <tbody>
-                                    <tr class="nominator">
-                                        <td>
-                                            {{nominator}}
-                                        </td>
-                                    </tr>
-                                    <tr>
-                                        <td>
-                                            7
-                                        </td>
-                                    </tr>
-                                </tbody>
-                            </table>
-                        </div>
-                        <div class="col"> + </div>
-                        <div class="col">
-                            <table>
-                                <tbody>
-                                    <tr class="nominator">
-                                        <td>
-                                            7
-                                        </td>
-                                    </tr>
-                                    <tr>
-                                        <td>
-                                            9
-                                        </td>
-                                    </tr>
-                                </tbody>
-                            </table>
-                        </div>
-                        <div class="col"> = </div>
-                        <div class="col"> res </div>
-                    </div>
-                    <!--Second row of expression-->
-                    <div class="row">
-                        <div class="col"> fr1 </div>
-                        <div class="col"> + </div>
-                        <div class="col"> fr2 </div>
-                        <div class="col"> = </div>
-                        <div class="col"> res </div>
-                    </div>
-                    <!--Third row of expression-->
-                    <div class="row">
-                        <div class="col"> fr1 </div>
-                        <div class="col"> + </div>
-                        <div class="col"> fr2 </div>
-                        <div class="col"> = </div>
-                        <div class="col"> res </div>
-                    </div>
+                    <fraction-question></fraction-question>
+                    <fraction-question></fraction-question>
+                    <fraction-question></fraction-question>
                 </div>
 
+                
 
             </div>
         </div>
