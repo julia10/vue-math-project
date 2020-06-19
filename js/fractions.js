@@ -1,8 +1,9 @@
+
 window.onload = function () {
 
-  Vue.component('fraction', {
-    props: ['nominator', 'denominator'],
-    template: `
+    Vue.component('fraction', {
+        props: ['nominator', 'denominator'],
+        template: `
     <table>
       <tbody>
         <tr>
@@ -14,18 +15,25 @@ window.onload = function () {
       </tbody>
     </table>
     `
-  })
+    })
 
-
-  Vue.component('fraction-question', {
-    data: function () {
-      return {
-        nom : '',
-        den : ''
-      }
-    },
-    props: ['question'],
-    template: ` 
+    Vue.component('fraction-question', {
+        data: function () {
+            return {
+                nom: '',
+                den: ''
+            }
+        },
+        props: ['question'],
+        watch: {
+            nom: function (val) {
+                this.question.answer.nominator = val;
+            },
+            den: function (val) {
+                this.question.answer.denominator = val;
+            }
+        },
+        template: ` 
     <table>
     <tbody>
         <tr>
@@ -52,76 +60,43 @@ window.onload = function () {
         </tr>
     </tbody>
 </table>`
-  })
+    })
 
-  var app = new Vue({
-    el: "#fractions-app",
-    data: {
-      questions: [],
-      correctAnswers: []
-    },
-    created: function () {
+    var app = new Vue({
+        el: "#fractions-app",
+        data: {
+            questions: []
+        },
+        created: function () {
 
-      //Fill in the array with three question fractions
-      let difficulty = 10;
-      for(let i = 0; i < 3; i++) {
-        this.questions.push(new Question(new Fraction(difficulty), new Fraction(difficulty), getRandomSign()));
-      }
+            //Fill in the array with three question fractions
+            let difficulty = 10;
+            for (let i = 0; i < 3; i++) {
+                const f1 = createRandomFraction(difficulty);
+                const f2 = createRandomFraction(difficulty);
+                this.questions.push(new Question(f1, f2, getRandomSign()));
+            }
+        },
 
-      //Fill in the array with correct answers
-      for(let i = 0; i < 3; i++) {
-        this.correctAnswers.push (this.questions[i].getAnswer());
-      }
-    },
-
-    component: [
-      'fraction-question'
-    ],
-    methods: {
-
-    }
-  })
-
-
-  function Question(fraction1, fraction2, sign) {
-    this.fractions = [fraction1, fraction2];
-    this.sign = sign;
-    this.getAnswer = function () {
-      if (this.sign == '+') {
-        return fraction1.float + fraction2.float;
-
-      } else if (this.sign == '-') {
-        return fraction1.float - fraction2.float;
-
-      } else if (this.sign == '*') {
-        return fraction1.float * fraction2.float;
-
-      } else if (this.sign == '/') {
-        return fraction1.float / fraction2.float;
-      }
-    }
-  }
-
-  function Fraction(difficulty) {
-
-    this.nominator = getRandomNumber(difficulty);
-    this.denominator = getRandomNumber(difficulty);
-    this.float = getfloat (this.nominator, this.denominator);
-  }
-
-  function getfloat (nom, den) {
-    return nom/den;
-  }
-
-  function getRandomSign() {
-    let signs = ['+', '-', '*', '/'];
-    let randomId = Math.floor(Math.random() * (signs.length));
-    return signs[randomId];
-  }
-
-  function getRandomNumber(difficulty) {
-    return Math.floor(Math.random() * difficulty) + 1;
-  }
-
-
+        component: [
+            'fraction-question'
+        ],
+        methods: {
+            checkResults() {
+                const answers = this.questions.map(v => v.answer);
+                const correctAnswers = this.questions.map(v => v.getAnswer())
+                for(let i = 0; i < answers.length; i++){
+                    if(answers[i].getfloat().toFixed(2) === correctAnswers[i].toFixed(2)){
+                        console.log("Q" + i + ' is true');
+                    }
+                    else{
+                        console.log("Q" + i + ' is false');
+                    }
+                    console.log('answers[i].float.toFixed(2)' + answers[i].getfloat().toFixed(2));
+                    console.log('correctAnswers[i].toFixed(2)' + correctAnswers[i].toFixed(2));
+                }
+                
+            }
+        }
+    })
 }

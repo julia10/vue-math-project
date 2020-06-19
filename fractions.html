@@ -10,6 +10,8 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.0/js/bootstrap.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+    <script src="/js/utils.js"></script>
+    <script src="/js/models.js"></script>
     <script src="/js/fractions.js"></script>
     <link rel="stylesheet" href="/css/style.css">
     <link rel="stylesheet" href="/css/fractions.css">
@@ -17,7 +19,6 @@
 </head>
 
 <body>
-
     <!-- Navbar -->
     <nav class="navbar navbar-expand-lg navbar-dark bg-color">
         <div class="container">
@@ -59,11 +60,9 @@
                 <h4>Try to calculate the correct answer for these questions:</h4>
 
                 <div class="container fractions-box text-center">
-                    <fraction-question :question='questions[0]'></fraction-question>
-                    <fraction-question :question='questions[1]'></fraction-question>
-                    <fraction-question :question='questions[2]'></fraction-question>
+                    <fraction-question v-for="(q, index) of questions" :question='q' :key='index'></fraction-question>
                 </div>
-                <button class="btn">Check</button>
+                <button class="btn" @click="checkResults">Check</button>
 
                 
 
