@@ -9,3 +9,8 @@
 .nominator {
     border-bottom: 1px solid;
 }
+
+.btn {
+    background-color: #272243;
+    color: aliceblue;
+}

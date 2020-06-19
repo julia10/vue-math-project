@@ -20,30 +20,31 @@ window.onload = function () {
   Vue.component('fraction-question', {
     data: function () {
       return {
-        nom: 5,
-        den: 10
+        nom : '',
+        den : ''
       }
     },
+    props: ['question'],
     template: ` 
     <table>
     <tbody>
         <tr>
             <td >
-                <fraction :nominator='nom' :denominator='den'></fraction>
+                <fraction :nominator='question.fractions[0].nominator' :denominator='question.fractions[0].denominator'></fraction>
             </td>
-            <td> + </td>
+            <td> {{ question.sign }} </td>
             <td>
-              <fraction :nominator='nom' :denominator='den'></fraction>
+              <fraction :nominator='question.fractions[1].nominator' :denominator='question.fractions[1].denominator'></fraction>
             </td>
             <td> = </td>
             <td>
               <table>
                 <tbody>
                   <tr>
-                    <td class="nominator"> <input></td>
+                    <td class="nominator"> <input v-model='nom'></td>
                   </tr>
                   <tr>
-                    <td><input></td>
+                    <td><input v-model='den'></td>
                   </tr>
                 </tbody>
               </table>
@@ -56,19 +57,28 @@ window.onload = function () {
   var app = new Vue({
     el: "#fractions-app",
     data: {
-      questions = []
+      questions: [],
+      correctAnswers: []
     },
-    computed: {
-      questions
-    },
-    methods: {
-      createQuestions: function(){
-        let difficulty = 10;
-        const q1 = new Question(new Fraction(difficulty), new Fraction(difficulty), getRandomSign());
-        const q2 = new Question(new Fraction(difficulty), new Fraction(difficulty), getRandomSign());
-        const q3 = new Question(new Fraction(difficulty), new Fraction(difficulty), getRandomSign());
-        return [q1, q2, q3];
+    created: function () {
+
+      //Fill in the array with three question fractions
+      let difficulty = 10;
+      for(let i = 0; i < 3; i++) {
+        this.questions.push(new Question(new Fraction(difficulty), new Fraction(difficulty), getRandomSign()));
       }
+
+      //Fill in the array with correct answers
+      for(let i = 0; i < 3; i++) {
+        this.correctAnswers.push (this.questions[i].getAnswer());
+      }
+    },
+
+    component: [
+      'fraction-question'
+    ],
+    methods: {
+
     }
   })
 
@@ -78,16 +88,16 @@ window.onload = function () {
     this.sign = sign;
     this.getAnswer = function () {
       if (this.sign == '+') {
-        return fraction1.getfloat + fraction2.getfloat;
+        return fraction1.float + fraction2.float;
 
       } else if (this.sign == '-') {
-        return fraction1.getfloat - fraction2.getfloat;
+        return fraction1.float - fraction2.float;
 
       } else if (this.sign == '*') {
-        return fraction1.getfloat * fraction2.getfloat;
+        return fraction1.float * fraction2.float;
 
       } else if (this.sign == '/') {
-        return fraction1.getfloat / fraction2.getfloat;
+        return fraction1.float / fraction2.float;
       }
     }
   }
@@ -96,10 +106,11 @@ window.onload = function () {
 
     this.nominator = getRandomNumber(difficulty);
     this.denominator = getRandomNumber(difficulty);
-    this.getfloat = function() {
-      return nominator / denominator;
-    }
+    this.float = getfloat (this.nominator, this.denominator);
+  }
 
+  function getfloat (nom, den) {
+    return nom/den;
   }
 
   function getRandomSign() {
@@ -109,7 +120,7 @@ window.onload = function () {
   }
 
   function getRandomNumber(difficulty) {
-    return Math.floor(Math.random() * difficulty);
+    return Math.floor(Math.random() * difficulty) + 1;
   }
 
 
