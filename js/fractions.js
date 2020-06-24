@@ -4,16 +4,11 @@ window.onload = function () {
     Vue.component('fraction', {
         props: ['nominator', 'denominator'],
         template: `
-    <table>
-      <tbody>
-        <tr>
-          <td class="nominator">  {{nominator}} </td>
-        </tr>
-        <tr>
-          <td>  {{denominator}} </td>
-        </tr>
-      </tbody>
-    </table>
+        <div class="d-flex flex-column align-items-center flex-fill">
+            <span>{{ nominator }}</span>
+            <span>---</span>
+            <span>{{ denominator }}</span>
+        </div>
     `
     })
 
@@ -21,13 +16,7 @@ window.onload = function () {
         data: function () {
             return {
                 nom: '',
-                den: '',
-
-                //Icons for correct or incorrect inputs
-                correct: '<i class="fa fa-check fa-fw fa-2x" id="icons" aria-hidden="true"></i>',
-                incorrect: '<i class="fa fa-times fa-fw fa-2x" id="icons" aria-hidden="true"></i>',
-                
-                feedback: ''
+                den: ''
             }
         },
         props: ['question'],
@@ -40,49 +29,34 @@ window.onload = function () {
             }
         },
         methods: {
-            checkAnswer: function() {
-                //Checking if there is den assigned by user
-                if(this.question.answer.nominator != 0 && this.question.answer.denominator != 0) {
-                    //Checking if result is true
-                    if(this.question.answer.getfloat().toFixed(2) == this.question.getAnswer()){
-                        this.feedback = this.correct;
-                    } else {
-                        this.feedback = this.incorrect;
-                    }
-                }
-            }
+
         },
-        template: `        
-    <table>
-    <tbody>
-        <tr>
-            <td >
-                <fraction :nominator='question.fractions[0].nominator' :denominator='question.fractions[0].denominator'></fraction>
-            </td>
-            <td> {{ question.sign }} </td>
-            <td>
-              <fraction :nominator='question.fractions[1].nominator' :denominator='question.fractions[1].denominator'></fraction>
-            </td>
-            <td> = </td>
-            <td>
-              <table>
-                <tbody>
-                  <tr>
-                    <td class="nominator"> <input v-model='nom'></td>
-                  </tr>
-                  <tr>
-                    <td><input v-model='den'></td>
-                  </tr>
-                </tbody>
-              </table>
-            </td>
-            <td><button class="btn" @click="checkAnswer"> <i class="fa fa-question" style="font-size:20px"></i></button></td>
-            <td v-html='feedback'>
-          
-            </td>
-        </tr>
-    </tbody>
-</table>`
+        template: ` 
+    <div>
+        <div class="d-flex align-items-center">
+            <div v-for="(f, index) of question.fractions" class="d-flex align-items-center">
+                <fraction
+                :nominator='f.nominator'
+                :denominator='f.denominator'></fraction>
+                <span v-if="index !== question.fractions.length - 1" class="mx-2">{{ question.sign }}</span>
+            </div>
+            <span class="mx-2"> = </span>
+            <div class="d-flex flex-column">
+                <input v-model='nom' class="form-control">
+                <input v-model='den' class="form-control">
+            </div>
+            <div class="ml-2">
+                <span v-if="question.status == 'correct'">
+                    <i class="fa fa-check fa-fw fa-2x text-success"></i>
+                </span>
+                <span v-else-if="question.status == 'incorrect'">
+                <i class="fa fa-times fa-fw fa-2x text-danger"></i>
+                </span>
+                <span v-else ></span>
+            </div>
+        </div>
+    </div>
+    `
     })
 
     var app = new Vue({
@@ -97,7 +71,8 @@ window.onload = function () {
             for (let i = 0; i < 3; i++) {
                 const f1 = createRandomFraction(difficulty);
                 const f2 = createRandomFraction(difficulty);
-                this.questions.push(new Question(f1, f2, getRandomSign()));
+                const sign = getRandomSign();
+                this.questions.push(new Question([f1, f2], sign, 'empty'));
             }
         },
 
@@ -106,19 +81,20 @@ window.onload = function () {
         ],
         methods: {
             checkResults() {
-                const answers = this.questions.map(v => v.answer);
+                const answers = this.questions.map(v => v.answer.getfloat());
                 const correctAnswers = this.questions.map(v => v.getAnswer())
-                for(let i = 0; i < answers.length; i++){
-                    if(answers[i].getfloat()  === correctAnswers[i] ){
+                for (let i = 0; i < answers.length; i++) {
+                    if (answers[i].toFixed(2) === correctAnswers[i].toFixed(2)) {
+                        this.questions[i].status = 'correct';
                         console.log("Q" + i + ' is true');
-                    }
-                    else{
+                    } else {
+                        this.questions[i].status = 'incorrect';
                         console.log("Q" + i + ' is false');
                     }
-                    console.log('answers[i].float ' + answers[i].getfloat() );
-                    console.log('correctAnswers[i] ' + correctAnswers[i] );
+                    console.log('answers[i] = ' + answers[i].toFixed(2));
+                    console.log('correctAnswers[i] = ' + correctAnswers[i]);
                 }
-                
+
             }
         }
     })

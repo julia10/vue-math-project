@@ -61,9 +61,12 @@
                 <h4>Try to calculate the correct answer for these questions:</h4>
 
                 <div class="container fractions-box text-center">
-                    <fraction-question v-for="(q, index) of questions" :question='q' :key='index'></fraction-question>
+                    <fraction-question v-for="(q, index) of questions"
+                    :question='q'
+                    :key='index'
+                    class="mb-3"></fraction-question>
                 </div>
-                <button class="btn" @click="checkResults">Check</button>
+                <button class="btn btn-primary mt-2" @click="checkResults">Check</button>
 
                 
 

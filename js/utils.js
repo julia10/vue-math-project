@@ -17,3 +17,15 @@ function getRandomSign() {
 function getRandomNumber(difficulty) {
     return Math.floor(Math.random() * difficulty) + 1;
 }
+
+function signToCalcFunc(sign) {
+    if (sign === '+') {
+        return (a, b) => a + b;
+    } else if (sign === '-') {
+        return (a, b) => a - b;
+    } else if (sign === '*') {
+        return (a, b) => a * b;
+    } else if (sign === '/') {
+        return (a, b) => a / b;
+    }
+}

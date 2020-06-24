@@ -1,20 +1,3 @@
-.fractions-box {
-    
-    padding-right: 20px;
-    padding-left: 20px;
-    padding-top: 20px;
-    padding-bottom: 20px;
-}
-
-.nominator {
-    border-bottom: 1px solid;
-}
-
-.btn {
-    background-color: #272243;
-    color: aliceblue;
-}
-
 #check-btn {
     color: #c1d4be;
 }
