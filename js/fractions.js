@@ -21,7 +21,13 @@ window.onload = function () {
         data: function () {
             return {
                 nom: '',
-                den: ''
+                den: '',
+
+                //Icons for correct or incorrect inputs
+                correct: '<i class="fa fa-check fa-fw fa-2x" id="icons" aria-hidden="true"></i>',
+                incorrect: '<i class="fa fa-times fa-fw fa-2x" id="icons" aria-hidden="true"></i>',
+                
+                feedback: ''
             }
         },
         props: ['question'],
@@ -33,7 +39,20 @@ window.onload = function () {
                 this.question.answer.denominator = val;
             }
         },
-        template: ` 
+        methods: {
+            checkAnswer: function() {
+                //Checking if there is den assigned by user
+                if(this.question.answer.nominator != 0 && this.question.answer.denominator != 0) {
+                    //Checking if result is true
+                    if(this.question.answer.getfloat().toFixed(2) == this.question.getAnswer()){
+                        this.feedback = this.correct;
+                    } else {
+                        this.feedback = this.incorrect;
+                    }
+                }
+            }
+        },
+        template: `        
     <table>
     <tbody>
         <tr>
@@ -56,6 +75,10 @@ window.onload = function () {
                   </tr>
                 </tbody>
               </table>
+            </td>
+            <td><button class="btn" @click="checkAnswer"> <i class="fa fa-question" style="font-size:20px"></i></button></td>
+            <td v-html='feedback'>
+          
             </td>
         </tr>
     </tbody>
@@ -86,14 +109,14 @@ window.onload = function () {
                 const answers = this.questions.map(v => v.answer);
                 const correctAnswers = this.questions.map(v => v.getAnswer())
                 for(let i = 0; i < answers.length; i++){
-                    if(answers[i].getfloat().toFixed(2) === correctAnswers[i].toFixed(2)){
+                    if(answers[i].getfloat()  === correctAnswers[i] ){
                         console.log("Q" + i + ' is true');
                     }
                     else{
                         console.log("Q" + i + ' is false');
                     }
-                    console.log('answers[i].float.toFixed(2)' + answers[i].getfloat().toFixed(2));
-                    console.log('correctAnswers[i].toFixed(2)' + correctAnswers[i].toFixed(2));
+                    console.log('answers[i].float ' + answers[i].getfloat() );
+                    console.log('correctAnswers[i] ' + correctAnswers[i] );
                 }
                 
             }
