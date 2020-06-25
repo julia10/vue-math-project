@@ -32,31 +32,31 @@ window.onload = function () {
 
         },
         template: ` 
-    <div>
-        <div class="d-flex align-items-center">
-            <div v-for="(f, index) of question.fractions" class="d-flex align-items-center">
-                <fraction
-                :nominator='f.nominator'
-                :denominator='f.denominator'></fraction>
-                <span v-if="index !== question.fractions.length - 1" class="mx-2">{{ question.sign }}</span>
-            </div>
-            <span class="mx-2"> = </span>
-            <div class="d-flex flex-column">
-                <input v-model='nom' class="form-control">
-                <input v-model='den' class="form-control">
-            </div>
-            <div class="ml-2">
-                <span v-if="question.status == 'correct'">
-                    <i class="fa fa-check fa-fw fa-2x text-success"></i>
-                </span>
-                <span v-else-if="question.status == 'incorrect'">
-                <i class="fa fa-times fa-fw fa-2x text-danger"></i>
-                </span>
-                <span v-else ></span>
+        <div>
+            <div class="d-flex align-items-center justify-content-center">
+                <div v-for="(f, index) of question.fractions" class="d-flex align-items-center">
+                    <fraction
+                    :nominator='f.nominator'
+                    :denominator='f.denominator'></fraction>
+                    <span v-if="index !== question.fractions.length - 1" class="mx-2">{{ question.sign }}</span>
+                </div>
+                <span class="mx-2"> = </span>
+                <div class="d-flex flex-column">
+                    <input v-model='nom' class="form-control">
+                    <input v-model='den' class="form-control">
+                </div>
+                <div class="ml-2">
+                    <span v-if="question.status == 'correct'">
+                        <i class="fa fa-check fa-fw fa-2x text-success"></i>
+                    </span>
+                    <span v-else-if="question.status == 'incorrect'">
+                    <i class="fa fa-times fa-fw fa-2x text-danger"></i>
+                    </span>
+                    <span v-else ></span>
+                </div>
             </div>
         </div>
-    </div>
-    `
+        `
     })
 
     var app = new Vue({
@@ -86,13 +86,9 @@ window.onload = function () {
                 for (let i = 0; i < answers.length; i++) {
                     if (answers[i].toFixed(2) === correctAnswers[i].toFixed(2)) {
                         this.questions[i].status = 'correct';
-                        console.log("Q" + i + ' is true');
                     } else {
                         this.questions[i].status = 'incorrect';
-                        console.log("Q" + i + ' is false');
                     }
-                    console.log('answers[i] = ' + answers[i].toFixed(2));
-                    console.log('correctAnswers[i] = ' + correctAnswers[i]);
                 }
 
             }

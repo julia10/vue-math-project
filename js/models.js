@@ -24,7 +24,6 @@ function Fraction(nom, den) {
     this.denominator = den;
 
     this.getfloat =  () => {
-        let result = this.nominator / this.denominator
-        return result;
+        return this.nominator / this.denominator;
     }
 }
