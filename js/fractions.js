@@ -15,21 +15,25 @@ window.onload = function () {
     Vue.component('fraction-question', {
         data: function () {
             return {
-                nom: '',
-                den: ''
+                nom: this.question.answer.nom,
+                den: this.question.answer.den
             }
         },
         props: ['question'],
         watch: {
             nom: function (val) {
-                this.question.answer.nominator = val;
+                this.question.answer.nom = val;
             },
             den: function (val) {
-                this.question.answer.denominator = val;
+                this.question.answer.den = val;
             }
         },
         methods: {
 
+        },
+        updated() {
+            this.nom = this.question.answer.nom;
+            this.den = this.question.answer.den;
         },
         template: ` 
         <div>
@@ -42,8 +46,8 @@ window.onload = function () {
                 </div>
                 <span class="mx-2"> = </span>
                 <div class="d-flex flex-column">
-                    <input v-model='nom' class="form-control">
-                    <input v-model='den' class="form-control">
+                    <input type="number" v-model='nom' class="form-control">
+                    <input type="number" v-model='den' class="form-control">
                 </div>
                 <div class="ml-2">
                     <span v-if="question.status == 'correct'">
@@ -64,12 +68,14 @@ window.onload = function () {
     var app = new Vue({
         el: "#fractions-app",
         data: {
-            questions: []
+            questions: [],
+
+            difficulty: 10,
+            amount: 3
         },
         created: function () {
             //Fill in the array with three question fractions
-            let difficulty = 10;
-            this.createQuestions(difficulty, 3); 
+            this.createQuestions();
         },
 
         component: [
@@ -77,29 +83,27 @@ window.onload = function () {
         ],
         methods: {
             checkResults() {
-                const answers = this.questions.map(v => v.answer.getfloat());
-                const correctAnswers = this.questions.map(v => v.getAnswer())
-                for (let i = 0; i < answers.length; i++) {
-                    if (this.questions[i].answer.nominator === 0 && this.questions[i].answer.denominator === 0) {
-                        this.questions[i].status = 'empty';
-                    }else if (answers[i].toFixed(2) === correctAnswers[i].toFixed(2)) {
-                        this.questions[i].status = 'correct';
-                    } else {
-                        this.questions[i].status = 'incorrect';
+                let qi = 1;
+                for (const question of this.questions) {
+                    const answer = question.answer;
+                    if (answer.nom === '' && answer.den === '') {
+                        question.status = 'empty';
+                    } else if (isValidFracNum(answer.nom) && isValidFracNum(answer.den)) {
+                        const fract = new Fraction(answer.nom, answer.den);
+                        const enteredResult = fract.getfloat();
+                        const correctResult = question.getAnswer();
+                        if (enteredResult.toFixed(2) === correctResult.toFixed(2)) {
+                            question.status = 'correct';
+                        } else {
+                            question.status = 'incorrect';
+                        }
                     }
-                    console.log("answers[i] = " + answers[i]);
-
+                    console.log(`Answer ${qi++}:`, answer);
                 }
-
             },
 
-            createQuestions(difficulty, amount) {
-                for (let i = 0; i < amount; i++) {
-                    const f1 = createRandomFraction(difficulty);
-                    const f2 = createRandomFraction(difficulty);
-                    const sign = getRandomSign();
-                    this.questions.push(new Question([f1, f2], sign, 'empty'));
-                }
+            createQuestions() {
+                this.questions = createFractionQuestions(this.difficulty, this.amount);
             }
         }
     })

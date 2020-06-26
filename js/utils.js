@@ -29,3 +29,22 @@ function signToCalcFunc(sign) {
         return (a, b) => a / b;
     }
 }
+
+function createFractionQuestions ( difficulty, amount ) {
+    const questions = [];
+    for (let i = 0; i < amount; i++) {
+        const f1 = createRandomFraction(difficulty);
+        const f2 = createRandomFraction(difficulty);
+        const sign = getRandomSign();
+        questions.push(new Question([f1, f2], sign, 'empty'));
+    }
+    return questions;
+}
+
+function isValidFracNum(val) {
+    if(val === undefined || val === null || val === 0) {
+        return false;
+    } else {
+        return true;
+    }
+}

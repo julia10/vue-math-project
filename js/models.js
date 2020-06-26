@@ -2,7 +2,10 @@ function Question(fractions, sign, status) {
     this.fractions = fractions;
     this.sign = sign;
     this.status = status; //'correct', 'incorrect', 'empty'
-    this.answer = new Fraction(0, 0);
+    this.answer = {
+        nom: '',
+        den: ''
+    };
 
     this.getAnswer = () => {
         const calcFunc = signToCalcFunc(this.sign);
