@@ -50,9 +50,11 @@ window.onload = function () {
                         <i class="fa fa-check fa-fw fa-2x text-success"></i>
                     </span>
                     <span v-else-if="question.status == 'incorrect'">
-                    <i class="fa fa-times fa-fw fa-2x text-danger"></i>
+                        <i class="fa fa-times fa-fw fa-2x text-danger"></i>
                     </span>
-                    <span v-else ></span>
+                    <span v-else >
+                        <i class="fa fa-question fa-fw fa-2x" ></i>
+                    </span>
                 </div>
             </div>
         </div>
@@ -65,15 +67,9 @@ window.onload = function () {
             questions: []
         },
         created: function () {
-
             //Fill in the array with three question fractions
             let difficulty = 10;
-            for (let i = 0; i < 3; i++) {
-                const f1 = createRandomFraction(difficulty);
-                const f2 = createRandomFraction(difficulty);
-                const sign = getRandomSign();
-                this.questions.push(new Question([f1, f2], sign, 'empty'));
-            }
+            this.createQuestions(difficulty, 3); 
         },
 
         component: [
@@ -84,13 +80,26 @@ window.onload = function () {
                 const answers = this.questions.map(v => v.answer.getfloat());
                 const correctAnswers = this.questions.map(v => v.getAnswer())
                 for (let i = 0; i < answers.length; i++) {
-                    if (answers[i].toFixed(2) === correctAnswers[i].toFixed(2)) {
+                    if (this.questions[i].answer.nominator === 0 && this.questions[i].answer.denominator === 0) {
+                        this.questions[i].status = 'empty';
+                    }else if (answers[i].toFixed(2) === correctAnswers[i].toFixed(2)) {
                         this.questions[i].status = 'correct';
                     } else {
                         this.questions[i].status = 'incorrect';
                     }
+                    console.log("answers[i] = " + answers[i]);
+
                 }
 
+            },
+
+            createQuestions(difficulty, amount) {
+                for (let i = 0; i < amount; i++) {
+                    const f1 = createRandomFraction(difficulty);
+                    const f2 = createRandomFraction(difficulty);
+                    const sign = getRandomSign();
+                    this.questions.push(new Question([f1, f2], sign, 'empty'));
+                }
             }
         }
     })
