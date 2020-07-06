@@ -1,4 +1,4 @@
-function Question(fractions, sign, status) {
+function FractionQuestion(fractions, sign, status) {
     this.fractions = fractions;
     this.sign = sign;
     this.status = status; //'correct', 'incorrect', 'empty'
@@ -28,5 +28,24 @@ function Fraction(nom, den) {
 
     this.getfloat =  () => {
         return this.nominator / this.denominator;
+    }
+}
+
+
+function FloatQuestion(floats, sign, status) {
+    this.floats = floats;
+    this.sign = sign;
+    this.status = status; //'correct', 'incorrect', 'empty'
+
+    this.getAnswer = () => {
+        const calcFunc = signToCalcFunc(this.sign);
+        const result = floats.reduce((total, curentValue) => {
+            if(total === null) {
+                return curentValue;
+            } else {
+                return calcFunc(total, curentValue);
+            }
+        }, null);
+        return result;
     }
 }

@@ -69,7 +69,6 @@ window.onload = function () {
         el: "#fractions-app",
         data: {
             questions: [],
-
             difficulty: 10,
             amount: 3
         },
