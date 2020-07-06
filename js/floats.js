@@ -5,8 +5,16 @@ window.onload = function () {
         props : ['question'],
 
         template : `
-        <div class="d-flex align-items-center justify-content-center">
-            <p> <span>{{question.floats[0]}} </span> {{question.sign}} <span> {{question.floats[1]}} </span> = <span><input type="number" class="form-control"></span> </p>
+        <div class="d-flex align-items-center justify-content-center m-2">
+
+            <div v-for="(float, index) of question.floats" class="d-flex align-items-center">
+                    {{float}}
+                    <span v-if="index !== question.floats.length - 1" class="mx-2">{{ question.sign }}</span>
+            </div>
+            <span class="mx-2"> = </span>
+            <div class="d-flex flex-column">
+                <input type="number" class="form-control">
+            </div>
         </div>
         `
     })
