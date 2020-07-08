@@ -36,6 +36,7 @@ function FloatQuestion(floats, sign, status) {
     this.floats = floats;
     this.sign = sign;
     this.status = status; //'correct', 'incorrect', 'empty'
+    this.userAnswer;
 
     this.getAnswer = () => {
         const calcFunc = signToCalcFunc(this.sign);
