@@ -47,6 +47,6 @@ function FloatQuestion(floats, sign, status) {
                 return calcFunc(total, curentValue);
             }
         }, null);
-        return result;
+        return parseFloat(result.toFixed(2));
     }
 }

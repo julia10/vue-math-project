@@ -27,7 +27,13 @@ window.onload = function () {
                 <input @keyup="sendData" v-model='userInput' type="number" class="form-control">
             </div>
             <div>
-                <span>
+                <span v-if="question.status == 'correct'">
+                    <i class="fa fa-check fa-fw fa-2x text-success"></i>
+                </span>
+                <span v-else-if="question.status == 'incorrect'">
+                    <i class="fa fa-times fa-fw fa-2x text-danger"></i>
+                </span>
+                <span v-else >
                     <i class="fa fa-question fa-fw fa-2x" ></i>
                 </span>
             </div>
@@ -55,9 +61,26 @@ window.onload = function () {
 
             assignUserInput(userInput, index) {
                 this.questions[index].userAnswer = parseFloat(userInput);
-            }
+            },
 
-            
+            checkUserInput() {
+                for (const question of this.questions) {
+                    //Check for empty
+                    if (question.userAnswer == null || question.userAnswer == '') {
+                        question.status = 'empty';
+                    } else {
+                        if (question.userAnswer === question.getAnswer()) {
+                            question.status = 'correct';
+                        } else {
+                            question.status = 'incorrect';
+                        }
+                        console.log(`
+                        User answer is ${question.userAnswer}
+                        And GetAnswer() is ${question.getAnswer()}
+                        `)
+                    }
+                }
+            }
         }
 
     })
